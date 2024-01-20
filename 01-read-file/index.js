@@ -1,14 +1,13 @@
-let person = {
-  name: 'Yoda',
-  designation: 'Jedi Master ',
-};
+const fs = require('fs');
+let path = require('path');
 
-function trainJedi(jediWarrion) {
-  if (jediWarrion.name === 'Yoda') {
-    console.log('No need! already trained');
-  }
-  console.log(`Training ${jediWarrion.name} complete`);
-}
+let pathP = path.join(__dirname, '../01-read-file/text.txt');
 
-trainJedi(person);
-trainJedi({ name: 'Adeel', designation: 'padawan' });
+const readStream = fs.createReadStream(pathP, {
+  encoding: 'utf8',
+});
+
+readStream.on('data', (chunk) => {
+  console.log('---------NEW CHUNK---------');
+  console.log(chunk.toString());
+});
