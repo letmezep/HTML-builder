@@ -8,6 +8,5 @@ const readStream = fs.createReadStream(pathP, {
 });
 
 readStream.on('data', (chunk) => {
-  console.log('---------NEW CHUNK---------');
   console.log(chunk.toString());
 });
