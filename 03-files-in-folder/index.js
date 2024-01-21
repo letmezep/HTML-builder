@@ -12,7 +12,13 @@ fs.readdir(dirPath, { withFileTypes: true }, (error, files) => {
     // let out = '';
     files.forEach((element) => {
       if (element.isFile()) {
-        console.log(element);
+        // console.log(element.name);
+        const elementPath = './secret-folder/' + element.name;
+        const extFile = path.extname(elementPath);
+        const newExtFile = path.extname(elementPath).substring(1);
+        const nameFile = path.basename(elementPath, extFile);
+        console.log(nameFile + ' ' + newExtFile);
+        // console.log(path.basename(elementPath, 'csv'));
       }
     });
     // console.log(out);
