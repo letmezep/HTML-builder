@@ -9,8 +9,15 @@ fs.readdir(dirPath, { withFileTypes: true }, (error, files) => {
     console.log('Error in reading contents');
     console.log(error.message);
   } else {
-    console.log('Contents are..');
-    console.log(files);
+    // let out = '';
+    files.forEach((element) => {
+      if (element.isFile()) {
+        console.log(element);
+      }
+    });
+    // console.log(out);
+    // console.log('Contents are..');
+    // console.log(files);
   }
 });
 
