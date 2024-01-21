@@ -19,4 +19,4 @@ rl.on('line', (input) => {
   }
 });
 
-process.on('exit', () => console.log('Goodbay! Text was written in text.txt'));
+process.on('exit', () => console.log('Goodbye! Text was written in text.txt'));
