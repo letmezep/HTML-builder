@@ -13,11 +13,27 @@ fs.readdir(dirPath, { withFileTypes: true }, (error, files) => {
     files.forEach((element) => {
       if (element.isFile()) {
         // console.log(element.name);
-        const elementPath = './secret-folder/' + element.name;
+        // const elementPath = './secret-folder/' + element.name;
+        const elementPath = path.resolve(
+          __dirname,
+          './secret-folder/' + element.name,
+        );
         const extFile = path.extname(elementPath);
         const newExtFile = path.extname(elementPath).substring(1);
         const nameFile = path.basename(elementPath, extFile);
-        console.log(nameFile + ' ' + newExtFile);
+        // const fileInfo = fs.stat(elementPath, (err, stats) => {
+        const fileSize = fs.stat(elementPath, (err, stats) => {
+          if (err) {
+            console.log(err);
+          } else {
+            // console.log('STATS: ', stats.size);
+            console.log(nameFile + ' ' + newExtFile + ' ' + stats.size);
+          }
+        });
+
+        // console.log(nameFile + ' ' + newExtFile);
+        // console.log(fileSize);
+
         // console.log(path.basename(elementPath, 'csv'));
       }
     });
