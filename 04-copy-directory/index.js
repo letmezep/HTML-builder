@@ -1,54 +1,44 @@
-// const fs = require('fs');
+const fs = require('fs');
 const { mkdir } = require('node:fs/promises');
 const { join } = require('node:path');
-// const path = require('path');
+const path = require('path');
 
-// const dirPath = path.join(__dirname, './files');
-// const copyDirPath = path.join(__dirname, './files-copy');
+const dirPath = path.join(__dirname, './files/');
+const copyDirPath = path.join(__dirname, './files-copy/');
 
 async function makeDirectory() {
   const projectFolder = join(__dirname, 'files-copy');
   const dirCreation = await mkdir(projectFolder, { recursive: true });
 
-  //   console.log(dirCreation);
   return dirCreation;
 }
 
-makeDirectory().catch(console.error);
+fs.readdir(dirPath, { withFileTypes: true }, (error, files) => {
+  if (error) {
+    console.log('Error in reading contents');
+    console.log(error.message);
+  } else {
+    console.log('MISSION COMPLETE');
+    console.log(files);
+
+    files.forEach((element) => {
+      const elementPath = path.resolve(__dirname, dirPath + element.name);
+      const copyElementPath = path.resolve(
+        __dirname,
+        copyDirPath + element.name,
+      );
+      fs.copyFile(elementPath, copyElementPath, (err) => {
+        if (err) {
+          console.log('Error: ', err);
+        }
+      });
+    });
+  }
+});
 
 const copyDir = () => {
-  console.log('function copyDir ready to WIN');
+  makeDirectory().catch(console.error);
+  console.log('function copyDir ready to RUN');
 };
 
 copyDir();
-
-// const dirPath = path.join(__dirname, './secret-folder');
-
-// fs.readdir(dirPath, { withFileTypes: true }, (error, files) => {
-//   if (error) {
-//     console.log('Error in reading contents');
-//     console.log(error.message);
-//   } else {
-//     files.forEach((element) => {
-//       if (element.isFile()) {
-//         const elementPath = path.resolve(
-//           __dirname,
-//           './secret-folder/' + element.name,
-//         );
-//         const extFile = path.extname(elementPath);
-//         const newExtFile = path.extname(elementPath).substring(1);
-//         const nameFile = path.basename(elementPath, extFile);
-
-//         fs.stat(elementPath, (err, stats) => {
-//           if (err) {
-//             console.log(err);
-//           } else {
-//             console.log(
-//               nameFile + ' - ' + newExtFile + ' - ' + stats.size + 'b',
-//             );
-//           }
-//         });
-//       }
-//     });
-//   }
-// });
