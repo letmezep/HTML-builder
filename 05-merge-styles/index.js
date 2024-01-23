@@ -1,4 +1,3 @@
-// const { error } = require('console');
 const fs = require('fs');
 let path = require('path');
 const dirPath = path.join(__dirname, './styles/');
