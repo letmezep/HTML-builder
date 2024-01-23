@@ -1,5 +1,6 @@
 const fs = require('fs');
 let path = require('path');
+const dirPath = path.join(__dirname, './styles/');
 
 let readDirectory = () => {
   fs.readdir(dirPath, { withFileTypes: true }, (error, files) => {
@@ -11,12 +12,12 @@ let readDirectory = () => {
         if (element.isFile()) {
           const elementPath = path.resolve(
             __dirname,
-            './secret-folder/' + element.name,
+            './styles/' + element.name,
           );
           const extFile = path.extname(elementPath);
           const newExtFile = path.extname(elementPath).substring(1);
           const nameFile = path.basename(elementPath, extFile);
-
+          // elementPath - add folder path
           fs.stat(elementPath, (err, stats) => {
             if (err) {
               console.log(err);
@@ -31,3 +32,5 @@ let readDirectory = () => {
     }
   });
 };
+
+readDirectory();
