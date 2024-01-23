@@ -15,15 +15,17 @@ let readDirectory = () => {
           const newExtFile = path.extname(elementPath).substring(1);
           const nameFile = path.basename(elementPath, extFile);
           // elementPath - add folder path
-          fs.stat(elementPath, (err, stats) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(
-                nameFile + ' - ' + newExtFile + ' - ' + stats.size + 'b',
-              );
-            }
-          });
+          if (extFile === '.css') {
+            fs.stat(elementPath, (err, stats) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(
+                  nameFile + ' - ' + newExtFile + ' - ' + stats.size + 'b',
+                );
+              }
+            });
+          }
         }
       });
     }
