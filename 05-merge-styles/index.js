@@ -10,10 +10,7 @@ let readDirectory = () => {
     } else {
       files.forEach((element) => {
         if (element.isFile()) {
-          const elementPath = path.resolve(
-            __dirname,
-            dirPath + element.name,
-          );
+          const elementPath = path.resolve(__dirname, dirPath + element.name);
           const extFile = path.extname(elementPath);
           const newExtFile = path.extname(elementPath).substring(1);
           const nameFile = path.basename(elementPath, extFile);
