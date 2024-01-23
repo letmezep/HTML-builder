@@ -26,7 +26,6 @@ let readFile = (elementPath) => {
     encoding: 'utf8',
   });
   readStream.on('data', (chunk) => {
-    console.log(chunk.toString());
     writeBundle(chunk);
   });
 };
@@ -39,6 +38,5 @@ let writeBundle = (chunk) => {
 
 fs.unlink('./05-merge-styles/project-dist/bundle.css', (error) => {
   if (error) return console.log(error);
-  console.log('File DELETE');
 });
 readDirectory();
