@@ -12,7 +12,7 @@ let readDirectory = () => {
         if (element.isFile()) {
           const elementPath = path.resolve(
             __dirname,
-            './styles/' + element.name,
+            dirPath + element.name,
           );
           const extFile = path.extname(elementPath);
           const newExtFile = path.extname(elementPath).substring(1);
