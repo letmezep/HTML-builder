@@ -4,27 +4,22 @@ const dirPath = path.join(__dirname, './files/');
 const copyDirPath = path.join(__dirname, './files-copy/');
 
 async function removeFiles() {
-  const res = await fs.readdir(
-    copyDirPath,
-    { withFileTypes: true },
-    (error, files) => {
-      if (error) {
-        console.log('Error in reading contents');
-        console.log(error.message);
-      } else {
-        files.forEach((element) => {
-          const copyElementPath = path.resolve(
-            __dirname,
-            copyDirPath + element.name,
-          );
-          fs.unlink(copyElementPath, () => {
-            console.log('DELETE FILES');
-          });
+  fs.readdir(copyDirPath, { withFileTypes: true }, (error, files) => {
+    if (error) {
+      console.log('Error in reading contents');
+      console.log(error.message);
+    } else {
+      files.forEach((element) => {
+        const copyElementPath = path.resolve(
+          __dirname,
+          copyDirPath + element.name,
+        );
+        fs.unlink(copyElementPath, () => {
+          console.log('DELETE FILES');
         });
-      }
-    },
-  );
-  return res;
+      });
+    }
+  });
 }
 
 async function makeDirectory() {
