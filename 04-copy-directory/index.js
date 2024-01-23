@@ -14,9 +14,7 @@ async function removeFiles() {
           __dirname,
           copyDirPath + element.name,
         );
-        fs.unlink(copyElementPath, () => {
-          console.log('DELETE FILES');
-        });
+        fs.unlink(copyElementPath, () => {});
       });
     }
   });
@@ -30,8 +28,6 @@ async function makeDirectory() {
       // fs.mkdir('./04-copy-directory/files-copy/', (err) => {
       if (err) {
         return console.log('MAKE MISTAKE!!!');
-      } else {
-        console.log('MAKE: ');
       }
     },
   );
@@ -58,8 +54,6 @@ async function readDirectory() {
           fs.copyFile(elementPath, copyElementPath, (err) => {
             if (err) {
               console.log('Error: ', err);
-            } else {
-              console.log('COPY: ');
             }
           });
         });
