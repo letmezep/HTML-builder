@@ -117,29 +117,23 @@ let writeCss = (chunk) => {
   });
 };
 
-let makeAssetsDir = (newDir) => {
-  fs.mkdir(newDir, { recursive: true }, (err) => {
-    // async function makeAssetsDir(newDir) {
-    //   const m = await fs.mkdir(newDir, { recursive: true }, (err) => {
-
+// let makeAssetsDir = (newDir) => {
+//   fs.mkdir(newDir, { recursive: true }, (err) => {
+async function makeAssetsDir(newDir) {
+  await fs.mkdir(newDir, { recursive: true }, (err) => {
     if (err) {
       console.log('makeAssetsDir ERROR ', err);
     }
   });
-  //   return m;
-};
+  //   console.log(m);
+}
 
-let copyAssetsDir = (assetsPath, copyAssetsDirPath) => {
-  fs.readdir(assetsPath, { withFileTypes: true }, (error, files) => {
+async function copyAssetsDir(assetsPath, copyAssetsDirPath) {
+  await fs.readdir(assetsPath, { withFileTypes: true }, (error, files) => {
     if (error) {
       console.log('copyAssetsDir ERROR');
       console.log(error);
     } else {
-      // fs.copyFile(
-      //     './06-build-page/assets/callme.txt',
-      //         './06-build-page/project-dist/assets/callme.txt',
-      //         () => {},
-      //       );
       files.forEach((element) => {
         let elementPath = assetsPath + element.name;
         let copyElementPath = copyAssetsDirPath + element.name;
@@ -159,9 +153,10 @@ let copyAssetsDir = (assetsPath, copyAssetsDirPath) => {
       });
     }
   });
-};
+}
 
-let build = () => {
+// let build = () => {
+async function build() {
   //write html from template
   createDirectory();
   readDirectory();
@@ -169,9 +164,8 @@ let build = () => {
   //CSS bundle
   readStyleDirectory();
   //copy assets
-
+  await makeAssetsDir(copyAssetsDirPath);
   copyAssetsDir(assetsPath, copyAssetsDirPath);
-};
+}
 
-makeAssetsDir(copyAssetsDirPath);
 build();
