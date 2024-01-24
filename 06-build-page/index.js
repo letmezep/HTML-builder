@@ -13,7 +13,8 @@ let fileNameArray = [];
 let createDirectory = () => {
   const resX = fs.mkdir(pathDir, { recursive: true }, (err) => {
     if (err) {
-      console.log('MAKE ME CREATE MISTAKE!!!');
+      console.log('createDirectory error: ');
+      console.log(err);
     }
   });
   return resX;
@@ -24,7 +25,7 @@ let readDirectory = () => {
   fs.readdir(pathComponents, { withFileTypes: true }, (error, files) => {
     if (error) {
       console.log('Error in reading contents');
-      console.log(error.message);
+      console.log(error);
     } else {
       getNameArray(files);
     }
@@ -50,7 +51,8 @@ const readTemplate = () => {
     fileNameArray.forEach((name) => {
       fs.readFile(pathComponents + name + '.html', 'utf8', (err, data) => {
         if (err) {
-          console.log('MAKE ME READ FILE MISTAKE!!!');
+          console.log('Error readTemplate');
+          console.log(err);
         }
         changeTemplate = changeTemplate.replace('{{' + name + '}}', data);
         writeHtml(changeTemplate);
@@ -62,7 +64,8 @@ const readTemplate = () => {
 const writeHtml = (x) => {
   fs.writeFile(pathHtml, x, 'utf8', (err) => {
     if (err) {
-      console.log('YOU LOSE WRITE!');
+      console.log('writeHtml ERROR');
+      console.log(err);
     }
   });
 };
@@ -73,16 +76,15 @@ let readStyleDirectory = () => {
   fs.access(pathCss, fs.F_OK, (err) => {
     if (!err) {
       fs.unlink(pathCss, (error) => {
-        if (error) return console.log(error);
+        if (error) return console.log('readStyleDirectory ERROR: ', error);
       });
     }
   });
-  console.log('readStyleDirectory!');
 
   fs.readdir(dirStylePath, { withFileTypes: true }, (error, files) => {
     if (error) {
       console.log('Error in reading contents');
-      console.log(error.message);
+      console.log(error);
     } else {
       files.forEach((element) => {
         if (element.isFile()) {
@@ -111,27 +113,27 @@ let readStyleFile = (elementPath) => {
 
 let writeCss = (chunk) => {
   fs.appendFile(pathCss, chunk, (err) => {
-    //   fs.appendFile('./05-merge-styles/project-dist/bundle.css', chunk, (err) => {
     if (err) throw err;
   });
 };
 
 let makeAssetsDir = (newDir) => {
   fs.mkdir(newDir, { recursive: true }, (err) => {
-    // fs.mkdir('./04-copy-directory/files-copy/', (err) => {
+    // async function makeAssetsDir(newDir) {
+    //   const m = await fs.mkdir(newDir, { recursive: true }, (err) => {
+
     if (err) {
-      return console.log('MAKE MISTAKE!!!');
+      console.log('makeAssetsDir ERROR ', err);
     }
   });
+  //   return m;
 };
 
 let copyAssetsDir = (assetsPath, copyAssetsDirPath) => {
-  // removeDir();
-  // makeDirectory();
   fs.readdir(assetsPath, { withFileTypes: true }, (error, files) => {
     if (error) {
-      console.log('Error in reading contents');
-      console.log(error.message);
+      console.log('copyAssetsDir ERROR');
+      console.log(error);
     } else {
       // fs.copyFile(
       //     './06-build-page/assets/callme.txt',
@@ -141,25 +143,10 @@ let copyAssetsDir = (assetsPath, copyAssetsDirPath) => {
       files.forEach((element) => {
         let elementPath = assetsPath + element.name;
         let copyElementPath = copyAssetsDirPath + element.name;
-        // console.log(element.name);
-        // const elementPath = path.resolve(__dirname, assetsPath + element.name);
-        // const copyElementPath = path.resolve(
-        //   __dirname,
-        //   copyAssetsDirPath + element.name,
-        // );
-        // console.log(copyAssetsDirPath);
-        // fs.copyFile(elementPath, copyElementPath, (err) => {
-        //   if (err) {
-        //     // console.log('Error: ', err);
-        //   }
-        // });
-
         if (element.isFile()) {
-          console.log('IS FILE ', element.name);
-
           fs.copyFile(elementPath, copyElementPath, (err) => {
-            console.log('COPYING from ', elementPath, ' to ', copyElementPath);
             if (err) {
+              console.log('Assets DIR copyFile ERROR');
               console.log(err);
             }
           });
@@ -168,30 +155,8 @@ let copyAssetsDir = (assetsPath, copyAssetsDirPath) => {
           elementPath += '/';
           copyElementPath += '/';
           copyAssetsDir(elementPath, copyElementPath);
-
-          console.log('assetsPath ', assetsPath);
-          console.log('elementPath ', elementPath);
-          console.log('copyElementPath', copyElementPath);
-
-          //   fs.copyFile(
-          //     './06-build-page/assets/callme.txt',
-          //     './06-build-page/project-dist/assets/callme.txt',
-          //     () => {},
-          //   );
-          //   fs.copyFile(elementPath, copyElementPath, (err) => {
-          //     if (err) {
-          //       console.log('Error: ', err);
         }
-        //   });
-        //   // } else {
-        //   //   console.log('IS NOT A FILE ', element.name);
-        //   //   let newDeepPath = assetsPath + element.name;
-        //   //   copyAssetsDir(newDeepPath);
-        //   //   console.log('newDeepPath ', newDeepPath);
-        //   // }
-        // }
       });
-      //     copyAssetsDir(assetsPath + element.name)
     }
   });
 };
