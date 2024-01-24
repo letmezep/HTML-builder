@@ -3,6 +3,8 @@ const path = require('path');
 const pathDir = './06-build-page/project-dist/';
 const pathTemplate = './06-build-page/template.html';
 const pathComponents = './06-build-page/components/';
+const assetsPath = './06-build-page/assets/';
+const copyAssetsDirPath = './06-build-page/project-dist/assets/';
 const pathHtml = pathDir + 'index.html';
 const pathCss = pathDir + 'style.css';
 let changeTemplate = 'FOOOFOOOFOOO';
@@ -77,10 +79,6 @@ let readStyleDirectory = () => {
   });
   console.log('readStyleDirectory!');
 
-  //   fs.unlink(pathCss, (error) => {
-  //     if (error) return console.log(error);
-  //   });
-
   fs.readdir(dirStylePath, { withFileTypes: true }, (error, files) => {
     if (error) {
       console.log('Error in reading contents');
@@ -118,6 +116,86 @@ let writeCss = (chunk) => {
   });
 };
 
+let makeAssetsDir = (newDir) => {
+  fs.mkdir(newDir, { recursive: true }, (err) => {
+    // fs.mkdir('./04-copy-directory/files-copy/', (err) => {
+    if (err) {
+      return console.log('MAKE MISTAKE!!!');
+    }
+  });
+};
+
+let copyAssetsDir = (assetsPath, copyAssetsDirPath) => {
+  // removeDir();
+  // makeDirectory();
+  fs.readdir(assetsPath, { withFileTypes: true }, (error, files) => {
+    if (error) {
+      console.log('Error in reading contents');
+      console.log(error.message);
+    } else {
+      // fs.copyFile(
+      //     './06-build-page/assets/callme.txt',
+      //         './06-build-page/project-dist/assets/callme.txt',
+      //         () => {},
+      //       );
+      files.forEach((element) => {
+        let elementPath = assetsPath + element.name;
+        let copyElementPath = copyAssetsDirPath + element.name;
+        // console.log(element.name);
+        // const elementPath = path.resolve(__dirname, assetsPath + element.name);
+        // const copyElementPath = path.resolve(
+        //   __dirname,
+        //   copyAssetsDirPath + element.name,
+        // );
+        // console.log(copyAssetsDirPath);
+        // fs.copyFile(elementPath, copyElementPath, (err) => {
+        //   if (err) {
+        //     // console.log('Error: ', err);
+        //   }
+        // });
+
+        if (element.isFile()) {
+          console.log('IS FILE ', element.name);
+
+          fs.copyFile(elementPath, copyElementPath, (err) => {
+            console.log('COPYING from ', elementPath, ' to ', copyElementPath);
+            if (err) {
+              console.log(err);
+            }
+          });
+        } else {
+          makeAssetsDir(copyElementPath);
+          elementPath += '/';
+          copyElementPath += '/';
+          copyAssetsDir(elementPath, copyElementPath);
+
+          console.log('assetsPath ', assetsPath);
+          console.log('elementPath ', elementPath);
+          console.log('copyElementPath', copyElementPath);
+
+          //   fs.copyFile(
+          //     './06-build-page/assets/callme.txt',
+          //     './06-build-page/project-dist/assets/callme.txt',
+          //     () => {},
+          //   );
+          //   fs.copyFile(elementPath, copyElementPath, (err) => {
+          //     if (err) {
+          //       console.log('Error: ', err);
+        }
+        //   });
+        //   // } else {
+        //   //   console.log('IS NOT A FILE ', element.name);
+        //   //   let newDeepPath = assetsPath + element.name;
+        //   //   copyAssetsDir(newDeepPath);
+        //   //   console.log('newDeepPath ', newDeepPath);
+        //   // }
+        // }
+      });
+      //     copyAssetsDir(assetsPath + element.name)
+    }
+  });
+};
+
 let build = () => {
   //write html from template
   createDirectory();
@@ -125,6 +203,10 @@ let build = () => {
   readTemplate();
   //CSS bundle
   readStyleDirectory();
+  //copy assets
+
+  copyAssetsDir(assetsPath, copyAssetsDirPath);
 };
 
+makeAssetsDir(copyAssetsDirPath);
 build();
