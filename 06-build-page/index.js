@@ -4,6 +4,7 @@ const pathDir = './06-build-page/project-dist/';
 const pathTemplate = './06-build-page/template.html';
 const pathComponents = './06-build-page/components/';
 const pathHtml = pathDir + 'index.html';
+const pathCss = pathDir + 'style.css';
 let changeTemplate = 'FOOOFOOOFOOO';
 let fileNameArray = [];
 
@@ -64,22 +65,36 @@ const writeHtml = (x) => {
   });
 };
 
-const fs = require('fs');
-let path = require('path');
-const dirPath = path.join(__dirname, './styles/');
+const dirStylePath = path.join(__dirname, './styles/');
 
-let readDirectory = () => {
-  fs.readdir(dirPath, { withFileTypes: true }, (error, files) => {
+let readStyleDirectory = () => {
+  fs.access(pathCss, fs.F_OK, (err) => {
+    if (!err) {
+      fs.unlink(pathCss, (error) => {
+        if (error) return console.log(error);
+      });
+    }
+  });
+  console.log('readStyleDirectory!');
+
+  //   fs.unlink(pathCss, (error) => {
+  //     if (error) return console.log(error);
+  //   });
+
+  fs.readdir(dirStylePath, { withFileTypes: true }, (error, files) => {
     if (error) {
       console.log('Error in reading contents');
       console.log(error.message);
     } else {
       files.forEach((element) => {
         if (element.isFile()) {
-          const elementPath = path.resolve(__dirname, dirPath + element.name);
+          const elementPath = path.resolve(
+            __dirname,
+            dirStylePath + element.name,
+          );
           const extFile = path.extname(elementPath);
           if (extFile === '.css') {
-            readFile(elementPath);
+            readStyleFile(elementPath);
           }
         }
       });
@@ -87,30 +102,29 @@ let readDirectory = () => {
   });
 };
 
-let readFile = (elementPath) => {
+let readStyleFile = (elementPath) => {
   const readStream = fs.createReadStream(elementPath, {
     encoding: 'utf8',
   });
   readStream.on('data', (chunk) => {
-    writeBundle(chunk);
+    writeCss(chunk);
   });
 };
 
-let writeBundle = (chunk) => {
-  fs.appendFile('./05-merge-styles/project-dist/bundle.css', chunk, (err) => {
+let writeCss = (chunk) => {
+  fs.appendFile(pathCss, chunk, (err) => {
+    //   fs.appendFile('./05-merge-styles/project-dist/bundle.css', chunk, (err) => {
     if (err) throw err;
   });
 };
 
-fs.unlink('./05-merge-styles/project-dist/bundle.css', (error) => {
-  if (error) return console.log(error);
-});
-readDirectory();
-
 let build = () => {
+  //write html from template
   createDirectory();
   readDirectory();
   readTemplate();
+  //CSS bundle
+  readStyleDirectory();
 };
 
 build();
