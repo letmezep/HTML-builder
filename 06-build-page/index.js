@@ -67,9 +67,7 @@ async function readTemplate() {
         '{{' + name + '}}',
         'WOODY WOODPECKER ONE header',
       );
-      //   writeHtml(chunk);
       console.log('{{' + name + '}}');
-      // writeHtml(changeTemplate);
     });
     writeHtml(changeTemplate);
     // changeTemplate =
@@ -127,6 +125,7 @@ async function readTemplate() {
 }
 
 async function writeHtml(chunk) {
+  fs.unlink(pathHtml, () => {});
   fs.appendFile(pathHtml, chunk, (err) => {
     if (err) throw err;
   });
