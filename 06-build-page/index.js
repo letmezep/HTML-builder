@@ -54,7 +54,7 @@ const readTemplate = () => {
           console.log('Error readTemplate');
           console.log(err);
         }
-        changeTemplate = changeTemplate.replace('{{' + name + '}}', data);
+        changeTemplate = changeTemplate.replaceAll('{{' + name + '}}', data);
         writeHtml(changeTemplate);
       });
     });
@@ -117,15 +117,12 @@ let writeCss = (chunk) => {
   });
 };
 
-// let makeAssetsDir = (newDir) => {
-//   fs.mkdir(newDir, { recursive: true }, (err) => {
 async function makeAssetsDir(newDir) {
   await fs.mkdir(newDir, { recursive: true }, (err) => {
     if (err) {
       console.log('makeAssetsDir ERROR ', err);
     }
   });
-  //   console.log(m);
 }
 
 async function copyAssetsDir(assetsPath, copyAssetsDirPath) {
